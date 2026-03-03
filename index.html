@@ -147,10 +147,10 @@
   </head>
   <body class="font-sans antialiased">
     <!-- Autoplay Music Player (Akan jalan setelah klik Buka Undangan) -->
-    <!-- Ganti src= dengan URL Lagu sesungguhnya -->
+    <!-- Ganti src= dengan URL Lagu sesungguhnya (Contoh saat ini menggunakan instrumen SoundHelix) -->
     <audio id="bg-music" loop>
       <source
-        src=""
+        src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
         type="audio/mpeg"
       />
     </audio>
@@ -235,7 +235,7 @@
             We Are Getting Married
           </p>
           <h1 class="font-serif text-6xl md:text-8xl italic shadow-sm">
-            A & Y
+            K & N
           </h1>
           <p class="font-sans font-light tracking-wide mt-4 italic">
             And the two shall become one.
@@ -259,6 +259,14 @@
             ></path>
           </svg>
         </div>
+      </section>
+
+      <!-- 1.5 Kutipan Doa (QS Ar-Rum: 21) -->
+      <section class="py-24 px-6 md:px-12 max-w-3xl mx-auto text-center reveal-element">
+        <p class="font-sans text-xs text-gold uppercase tracking-[0.2em] mb-6 font-semibold">QS. Ar-Rum: 21</p>
+        <p class="font-serif text-2xl md:text-3xl text-charcoal leading-relaxed italic border-x-2 border-gold/30 px-6 py-4">
+          "Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang."
+        </p>
       </section>
 
       <!-- 2. Love Story (The Couple) -->
@@ -464,12 +472,12 @@
             </h3>
             <p class="font-sans text-sm text-charcoal/80">
               <span class="font-semibold text-charcoal"
-                >Sabtu, 12 Desember 2026</span
+                ><!-- GANTI TANGGAL DI SINI -->Sabtu, 12 Desember 2026</span
               ><br />
               Pukul 08.00 WIB - Selesai
             </p>
             <p class="font-sans text-sm text-charcoal/80">
-              <strong>Masjid Raya Agung</strong><br />Jl. Pernikahan Indah No.
+              <strong><!-- GANTI LOKASI DI SINI -->Masjid Raya Agung</strong><br />Jl. Pernikahan Indah No.
               1, Jakarta
             </p>
           </div>
@@ -482,12 +490,12 @@
             </h3>
             <p class="font-sans text-sm text-charcoal/80">
               <span class="font-semibold text-charcoal"
-                >Sabtu, 12 Desember 2026</span
+                ><!-- GANTI TANGGAL DI SINI -->Sabtu, 12 Desember 2026</span
               ><br />
               Pukul 11.00 WIB - 13.00 WIB
             </p>
             <p class="font-sans text-sm text-charcoal/80">
-              <strong>Grand Luxury Hotel</strong><br />Jl. Sudirman No 88,
+              <strong><!-- GANTI LOKASI DI SINI -->Grand Luxury Hotel</strong><br />Jl. Sudirman No 88,
               Jakarta Pusat
             </p>
           </div>
@@ -502,6 +510,36 @@
           >
             Buka di Aplikasi Maps
           </a>
+        </div>
+      </section>
+
+      <!-- 4.5 Wedding Gift (Amplop Digital) -->
+      <section class="py-24 px-6 max-w-4xl mx-auto text-center bg-gray-50/50 border-t border-gray-200">
+        <div class="reveal-element mb-12 space-y-4">
+          <p class="font-sans uppercase tracking-[0.2em] text-xs text-gold font-semibold">Wedding Gift</p>
+          <h2 class="font-serif text-4xl text-charcoal">Kirim Hadiah</h2>
+          <p class="font-sans text-sm text-charcoal/70 font-light max-w-xl mx-auto">
+            Doa restu Anda merupakan karunia yang sangat berarti bagi kami. Namun jika Anda bermaksud memberikan tanda kasih, Anda dapat mengirimkannya melalui:
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-2xl mx-auto reveal-element">
+          <!-- Rekening 1 -->
+          <div class="bg-white p-8 rounded shadow-sm border border-gray-100 flex flex-col items-center justify-center space-y-4 hover:shadow-md transition-shadow">
+            <h3 class="font-sans font-bold text-lg tracking-wide text-blue-800">Bank BCA</h3>
+            <!-- Ganti Rekening Di Sini -->
+            <p class="font-sans text-2xl tracking-widest text-charcoal" id="rek-bca">1234 5678 90</p>
+            <p class="font-sans text-sm text-charcoal/70">a.n. Khoirul Anam</p>
+            <button onclick="navigator.clipboard.writeText('1234567890'); alert('Nomor Rekening BCA disalin!');" class="mt-4 px-6 py-2 bg-gray-100 text-charcoal font-sans text-xs uppercase tracking-widest hover:bg-gold hover:text-white transition-colors rounded">Salin Rekening BCA</button>
+          </div>
+          <!-- Rekening 2 / DANA -->
+          <div class="bg-white p-8 rounded shadow-sm border border-gray-100 flex flex-col items-center justify-center space-y-4 hover:shadow-md transition-shadow">
+            <h3 class="font-sans font-bold text-lg tracking-wide text-blue-500">DANA</h3>
+            <!-- Ganti Nomor DANA Di Sini -->
+            <p class="font-sans text-2xl tracking-widest text-charcoal" id="rek-dana">0812 3456 7890</p>
+            <p class="font-sans text-sm text-charcoal/70">a.n. Nabila Ningsih</p>
+            <button onclick="navigator.clipboard.writeText('081234567890'); alert('Nomor DANA disalin!');" class="mt-4 px-6 py-2 bg-gray-100 text-charcoal font-sans text-xs uppercase tracking-widest hover:bg-gold hover:text-white transition-colors rounded">Salin Nomor DANA</button>
+          </div>
         </div>
       </section>
 
