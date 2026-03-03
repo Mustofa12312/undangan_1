@@ -1,0 +1,738 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Professional Digital Wedding Invitation</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              pearl: "#FDFCF0" /* Pearl White */,
+              charcoal: "#1A1A1A" /* Deep Charcoal */,
+              gold: "#D4AF37" /* Gold Accent */,
+            },
+            fontFamily: {
+              serif: ['"Cormorant Garamond"', "serif"],
+              sans: ['"Inter"', "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Google Fonts: Cormorant Garamond (Serif) & Inter (Sans-serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Luminous Lightbox CSS (Untuk efek klik perbesar foto gallery) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/luminous-lightbox/2.3.2/luminous-basic.min.css"
+    />
+
+    <style>
+      body {
+        background-color: #fdfcf0;
+        color: #1a1a1a;
+        /* Mencegah scroll frame utama sebelum tombol undangan dibuka */
+        overflow: hidden;
+      }
+
+      /* Tema Luxury - Animasi Blur-in pada button dan nama Hero (Cover) */
+      .blur-in {
+        filter: blur(12px);
+        opacity: 0;
+        transition: all 1.5s ease-out;
+      }
+      .blur-in.active {
+        filter: blur(0px);
+        opacity: 1;
+      }
+
+      /* Utilities menyembunyikan cover secara smooth */
+      .cover-exit {
+        transform: translateY(-100%);
+        opacity: 0;
+        transition: all 1.2s cubic-bezier(0.8, 0, 0.2, 1);
+        pointer-events: none; /* agar tidak bisa diklik lagi setelah hilang */
+      }
+
+      /* Grid Estetik / Masonry */
+      .masonry-grid {
+        column-count: 2; /* Default Mobile-First */
+        column-gap: 1rem;
+      }
+      @media (min-width: 768px) {
+        .masonry-grid {
+          column-count: 3; /* Tablet / Desktop */
+        }
+      }
+      .masonry-item {
+        break-inside: avoid;
+        margin-bottom: 1rem;
+        position: relative;
+        overflow: hidden;
+        border-radius: 0.5rem; /* Sudut halus agar terlihat premium */
+      }
+
+      /* Foto Scale-up halus pada Hover */
+      .masonry-item img {
+        width: 100%;
+        display: block;
+        transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+      .masonry-item:hover img {
+        transform: scale(1.06);
+      }
+
+      /* Gaya awal elemen animasi GSAP Reveal */
+      .reveal-element {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+
+      /* Tombol Music melayang di pojok kanan bawah */
+      .music-btn {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 50;
+        background: #d4af37;
+        color: #fff;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        display: none; /* Disembunyikan awalnya */
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      }
+      .spin-inf {
+        animation: spinCD 4s linear infinite;
+      }
+      @keyframes spinCD {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Spinner Tombol RSVP */
+      .loader-spinner {
+        border: 2px solid rgba(253, 252, 240, 0.3);
+        border-top-color: #fdfcf0;
+        border-radius: 50%;
+        width: 1.25rem;
+        height: 1.25rem;
+        animation: rsvpSpin 1s linear infinite;
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 0.5rem;
+      }
+      @keyframes rsvpSpin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body class="font-sans antialiased">
+    <!-- Autoplay Music Player (Akan jalan setelah klik Buka Undangan) -->
+    <!-- Ganti src= dengan URL Lagu sesungguhnya -->
+    <audio id="bg-music" loop>
+      <source
+        src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+        type="audio/mpeg"
+      />
+    </audio>
+
+    <!-- Tombol kendali Music -->
+    <button id="musicToggle" class="music-btn">
+      <svg
+        class="w-6 h-6 spin-inf glow-icon"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1.5"
+          d="M9 19V6l12-3v13M9 19c-1.105 0-2-.895-2-2s.895-2 2-2 2 .895 2 2-.895 2-2 2zm12-3c-1.105 0-2-.895-2-2s.895-2 2-2 2 .895 2 2-.895 2-2 2z"
+        ></path>
+      </svg>
+    </button>
+
+    <!-- ===== COVER SECTION ===== -->
+    <div
+      id="cover"
+      class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-charcoal text-pearl transition-all"
+    >
+      <div class="absolute inset-0 z-0 overflow-hidden">
+        <!-- Foto Placeholder Cover -->
+        <img
+          src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+          alt="Cover Blur Background"
+          class="w-full h-full object-cover opacity-60 blur-sm scale-110"
+        />
+        <div class="absolute inset-0 bg-charcoal/40"></div>
+      </div>
+
+      <div class="z-10 text-center space-y-6 px-6 max-w-lg">
+        <h3
+          class="font-sans text-xs tracking-[0.2em] text-gold uppercase opacity-90"
+        >
+          The Wedding Of
+        </h3>
+        <h1
+          class="font-serif text-6xl md:text-8xl italic blur-in"
+          id="cover-names"
+        >
+          Anas  & Yatun
+        </h1>
+        <p class="font-sans text-sm tracking-widest font-light mt-2 blur-in">
+          12 . 12 . 2026
+        </p>
+
+        <div class="pt-8 blur-in">
+          <button
+            id="btn-open"
+            class="px-8 py-3 bg-gold/90 text-pearl font-sans text-sm tracking-widest uppercase rounded-full hover:bg-gold hover:scale-105 transition-all duration-300 shadow-xl border border-white/20"
+          >
+            Buka Undangan
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== MAIN CONTENT ====== -->
+    <div id="main-content" class="opacity-0 transition-opacity duration-1000">
+      <!-- 1. Hero Section dg Efek Parallax -->
+      <section
+        class="h-[100svh] relative flex flex-col justify-center items-center overflow-hidden"
+      >
+        <div class="absolute inset-0 z-0">
+          <!-- Foto Placeholder Hero Main Parallax -->
+          <img src="lanscap.jpeg" alt="Hero Parallax Foto" class="parallax-img w-full h-full object-cover origin-top transform scale-125" />
+          <div
+            class="absolute inset-0 bg-gradient-to-b from-charcoal/30 via-transparent to-charcoal/80"
+          ></div>
+        </div>
+
+        <div
+          class="z-20 text-center text-pearl space-y-4 px-6 reveal-element mt-auto mb-32"
+        >
+          <p class="font-sans uppercase tracking-[0.3em] text-xs text-gold">
+            We Are Getting Married
+          </p>
+          <h1 class="font-serif text-6xl md:text-8xl italic shadow-sm">
+            A & Y
+          </h1>
+          <p class="font-sans font-light tracking-wide mt-4 italic">
+            And the two shall become one.
+          </p>
+        </div>
+
+        <div
+          class="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20 animate-bounce"
+        >
+          <svg
+            class="w-6 h-6 text-pearl opacity-60"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M19 14l-7 7m0 0l-7-7m7 7V3"
+            ></path>
+          </svg>
+        </div>
+      </section>
+
+      <!-- 2. Love Story (The Couple) -->
+      <section
+        class="py-24 px-6 md:px-12 max-w-5xl mx-auto text-center bg-pearl"
+      >
+        <div class="reveal-element space-y-6">
+          <p
+            class="font-sans uppercase text-gold tracking-widest text-xs font-semibold"
+          >
+            Groom & Bride
+          </p>
+          <h2 class="font-serif text-4xl text-charcoal">The Happy Couple</h2>
+          <div class="w-12 h-[1px] bg-gold mx-auto my-6"></div>
+          <p
+            class="font-sans text-charcoal/70 font-light leading-loose max-w-2xl mx-auto"
+          >
+            Tanpa mengurangi rasa hormat, kami bermaksud mengundang
+            Bapak/Ibu/Saudara/i untuk hadir dan menyaksikan momen sakral
+            pernikahan kami.
+          </p>
+        </div>
+
+        <div
+          class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-8 items-center"
+        >
+          <!-- Groom -->
+          <div class="reveal-element space-y-6 flex flex-col items-center">
+            <div
+              class="w-56 h-56 mx-auto rounded-full overflow-hidden shadow-2xl relative"
+            >
+              <!-- Foto Placeholder Groom / Mempelai Pria -->
+              <img
+                src="1a.jpeg"
+                alt="Groom"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <div>
+              <h3
+                class="font-serif text-3xl font-bold bg-clip-text text-charcoal"
+              >
+                Romeo Montague
+              </h3>
+              <p class="font-sans text-xs text-charcoal/60 mt-2 font-light">
+                Putra Pertama dari<br />Bpk. Montague & Ibu P. Montague
+              </p>
+              <div class="mt-4">
+                <a
+                  href="#"
+                  class="inline-block text-gold hover:text-charcoal transition-colors font-sans text-sm"
+                  ><i class="fab fa-instagram"></i> @romeomontague</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Bride -->
+          <div class="reveal-element space-y-6 flex flex-col items-center">
+            <div
+              class="w-56 h-56 mx-auto rounded-full overflow-hidden shadow-2xl relative"
+            >
+              <!-- Foto Placeholder Bride / Mempelai Wanita -->
+              <img
+                src="3a.jpeg"
+                alt="Bride"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <div>
+              <h3 class="font-serif text-3xl font-bold text-charcoal">
+                Juliet Capulet
+              </h3>
+              <p class="font-sans text-xs text-charcoal/60 mt-2 font-light">
+                Putri Kedua dari<br />Bpk. Capulet & Ibu Capulet
+              </p>
+              <div class="mt-4">
+                <a
+                  href="#"
+                  class="inline-block text-gold hover:text-charcoal transition-colors font-sans text-sm"
+                  ><i class="fab fa-instagram"></i> @julietcapulet</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Photo Gallery (Masonry Grid & Lightbox) -->
+      <section class="py-24 bg-charcoal text-pearl px-4 md:px-12">
+        <div class="max-w-6xl mx-auto">
+          <div class="text-center reveal-element mb-16">
+            <p
+              class="font-sans font-semibold tracking-[0.2em] text-xs text-gold uppercase mb-2"
+            >
+              Our Story
+            </p>
+            <h2 class="font-serif text-4xl mb-4">Memories In Frame</h2>
+            <div class="w-12 h-[1px] bg-pearl/20 mx-auto mt-6"></div>
+          </div>
+
+          <div class="masonry-grid justify-center">
+            <!-- Foto Placeholder Gallery 1 (Portrait) -->
+            <a
+              href="1a.jpeg"
+              class="masonry-item luminous reveal-element block"
+            >
+              <img
+                src="1a.jpeg"
+                alt="Gallery Photo 1"
+                class="w-full h-auto"
+              />
+            </a>
+
+            <!-- Foto Placeholder Gallery 2 (Square) -->
+            <a
+              href="7a.jpeg"
+              class="masonry-item luminous reveal-element block"
+            >
+              <img
+                src="7a.jpeg"
+                alt="Gallery Photo 2"
+                class="w-full h-auto"
+              />
+            </a>
+
+            <!-- Foto Placeholder Gallery 3 (Landscape) -->
+            <a
+              href="3a.jpeg"
+              class="masonry-item luminous reveal-element block"
+            >
+              <img
+                src="3a.jpeg"
+                alt="Gallery Photo 3"
+                class="w-full h-auto"
+              />
+            </a>
+
+            <!-- Foto Placeholder Gallery 4 (Square) -->
+            <a
+              href="8a.jpeg"
+              class="masonry-item luminous reveal-element block"
+            >
+              <img
+                src="8a.jpeg"
+                alt="Gallery Photo 4"
+                class="w-full h-auto"
+              />
+            </a>
+
+            <!-- Foto Placeholder Gallery 5 (Portrait) -->
+            <a
+              href="5a.jpeg"
+              class="masonry-item luminous reveal-element block"
+            >
+              <img
+                src="5a.jpeg"
+                alt="Gallery Photo 5"
+                class="w-full h-auto"
+              />
+            </a>
+
+            <!-- Foto Placeholder Gallery 6 (Portrait) -->
+            <a
+              href="6a.jpeg"
+              class="masonry-item luminous reveal-element block"
+            >
+              <img
+                src="6a.jpeg"
+                alt="Gallery Photo 6"
+                class="w-full h-auto"
+              />
+            </a>
+          </div>
+          <p
+            class="text-center font-sans text-xs text-pearl/50 mt-8 italic reveal-element"
+          >
+            Klik pada foto untuk memperbesar.
+          </p>
+        </div>
+      </section>
+
+      <!-- 4. Event Details -->
+      <section class="py-24 px-6 max-w-4xl mx-auto text-center bg-pearl">
+        <div class="reveal-element mb-16 space-y-4">
+          <p
+            class="font-sans uppercase tracking-[0.2em] text-xs text-gold font-semibold"
+          >
+            Save The Date
+          </p>
+          <h2 class="font-serif text-4xl text-charcoal">Waktu & Tempat</h2>
+        </div>
+
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 gap-12 text-left bg-white p-8 md:p-12 shadow-md border border-gray-100 reveal-element"
+        >
+          <!-- Akad -->
+          <div class="space-y-4">
+            <h3
+              class="font-serif text-2xl text-gold border-b border-gray-100 pb-2"
+            >
+              Akad Nikah
+            </h3>
+            <p class="font-sans text-sm text-charcoal/80">
+              <span class="font-semibold text-charcoal"
+                >Sabtu, 12 Desember 2026</span
+              ><br />
+              Pukul 08.00 WIB - Selesai
+            </p>
+            <p class="font-sans text-sm text-charcoal/80">
+              <strong>Masjid Raya Agung</strong><br />Jl. Pernikahan Indah No.
+              1, Jakarta
+            </p>
+          </div>
+          <!-- Resepsi -->
+          <div class="space-y-4">
+            <h3
+              class="font-serif text-2xl text-gold border-b border-gray-100 pb-2"
+            >
+              Resepsi
+            </h3>
+            <p class="font-sans text-sm text-charcoal/80">
+              <span class="font-semibold text-charcoal"
+                >Sabtu, 12 Desember 2026</span
+              ><br />
+              Pukul 11.00 WIB - 13.00 WIB
+            </p>
+            <p class="font-sans text-sm text-charcoal/80">
+              <strong>Grand Luxury Hotel</strong><br />Jl. Sudirman No 88,
+              Jakarta Pusat
+            </p>
+          </div>
+        </div>
+
+       
+        <div class="mt-8 reveal-element">
+          <a
+            href="https://maps.app.goo.gl/KmVLcwe1iKg4zeGs6"
+            target="_blank"
+            class="inline-block px-8 py-3 bg-charcoal text-pearl font-sans text-sm tracking-widest uppercase hover:bg-black transition-colors rounded"
+          >
+            Buka di Aplikasi Maps
+          </a>
+        </div>
+      </section>
+
+      <!-- 5. RSVP Form Section -->
+      <section
+        class="py-24 px-6 max-w-3xl mx-auto text-center border-t border-gray-200"
+      >
+        <div class="reveal-element mb-12">
+          <p
+            class="font-sans uppercase text-gold tracking-widest text-xs font-semibold mb-2"
+          >
+            Be Our Guest
+          </p>
+          <h2 class="font-serif text-4xl text-charcoal">Are You Attending?</h2>
+          <p class="font-sans text-charcoal/60 mt-4 text-sm font-light">
+            Mohon konfirmasi kehadiran Anda demi kelancaran acara.
+          </p>
+        </div>
+
+        <form
+          id="rsvp-form"
+          class="space-y-6 text-left reveal-element bg-white p-8 border border-gray-100 shadow-sm rounded"
+        >
+          <div>
+            <label class="block font-sans text-sm text-charcoal/80 mb-2"
+              >Nama Lengkap</label
+            >
+            <input
+              type="text"
+              id="rsvp-name"
+              required
+              class="w-full px-4 py-3 border border-gray-200 rounded focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold font-sans bg-transparent transition-colors"
+            />
+          </div>
+          <div>
+            <label class="block font-sans text-sm text-charcoal/80 mb-2"
+              >Jumlah Kehadiran</label
+            >
+            <select
+              id="rsvp-count"
+              class="w-full px-4 py-3 border border-gray-200 rounded focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold font-sans bg-transparent transition-colors"
+            >
+              <option value="1">1 Orang</option>
+              <option value="2">2 Orang</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-sans text-sm text-charcoal/80 mb-2"
+              >Konfirmasi Kehadiran</label
+            >
+            <select
+              id="rsvp-status"
+              class="w-full px-4 py-3 border border-gray-200 rounded focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold font-sans bg-transparent transition-colors"
+            >
+              <option value="yes">Ya, Saya akan hadir</option>
+              <option value="no">Maaf, tidak bisa hadir</option>
+            </select>
+          </div>
+          <button
+            type="submit"
+            id="rsvp-btn"
+            class="w-full py-4 mt-4 bg-charcoal text-pearl font-sans text-sm font-semibold tracking-widest hover:bg-black transition-colors rounded relative overflow-hidden group"
+          >
+            <span id="btn-text">KIRIM KONFIRMASI</span>
+            <span
+              id="btn-loader"
+              class="loader-spinner"
+              style="display: none"
+            ></span>
+          </button>
+        </form>
+      </section>
+
+      <!-- Footer -->
+      <footer
+        class="bg-charcoal py-12 text-center text-pearl/50 font-sans text-[10px] sm:text-xs tracking-[0.2em] uppercase"
+      >
+        <p>Made with Love for Romeo & Juliet &copy; 2026</p>
+      </footer>
+    </div>
+
+    <!-- ===== JS LIBRARIES ====== -->
+    <!-- GSAP (GreenSock) Core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <!-- GSAP ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- Luminous Lightbox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/luminous-lightbox/2.3.2/luminous.min.js"></script>
+
+    <!-- ===== CUSTOM SCRIPTS ====== -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        gsap.registerPlugin(ScrollTrigger);
+
+        const btnOpen = document.getElementById("btn-open");
+        const cover = document.getElementById("cover");
+        const mainContent = document.getElementById("main-content");
+        const bgMusic = document.getElementById("bg-music");
+        const musicToggle = document.getElementById("musicToggle");
+        let isMusicPlaying = false;
+
+        // Trigger blur-in animation saat halaman pertama diload (Cover)
+        setTimeout(() => {
+          document.querySelectorAll(".blur-in").forEach((el) => {
+            el.classList.add("active");
+          });
+        }, 300);
+
+        // Action saat klik Buka Undangan
+        btnOpen.addEventListener("click", () => {
+          // Sembunyikan cover secara perlahan ke atas
+          cover.classList.add("cover-exit");
+          document.body.style.overflow = "auto"; // izinkan scrolling
+          mainContent.style.opacity = "1";
+
+          // Coba putar musik otomatis
+          bgMusic
+            .play()
+            .then(() => {
+              isMusicPlaying = true;
+              musicToggle.style.display = "flex"; // munculkan tombol musik
+            })
+            .catch((e) => {
+              console.log("Auto-play musik diblokir oleh browser.", e);
+              // Munculkan tombol dgn status tidak main
+              musicToggle.style.display = "flex";
+              musicToggle.querySelector("svg").classList.remove("spin-inf");
+            });
+
+          // Initialize Parallax Hero Image (Background turun perlahan saat di-scroll)
+          const heroImg = document.querySelector(".parallax-img");
+          if (heroImg) {
+            gsap.to(heroImg, {
+              yPercent: 30,
+              ease: "none",
+              scrollTrigger: {
+                trigger: heroImg.parentElement, // kontainer section hero
+                start: "top top",
+                end: "bottom top",
+                scrub: 1, // smooth scrubbing (1s lag delay)
+              },
+            });
+          }
+
+          // Inisialisasi setiap elemen Reveal menggunakan GSAP + ScrollTrigger
+          gsap.utils.toArray(".reveal-element").forEach((elem) => {
+            gsap.to(elem, {
+              scrollTrigger: {
+                trigger: elem,
+                start: "top 88%", // Mulai dianimasi jika elemen menyentuh 88% batas bawah viewport
+                toggleActions: "play none none reverse", // Memungkinkan reveal berulang
+              },
+              y: 0,
+              opacity: 1,
+              duration: 1.2,
+              ease: "power3.out",
+            });
+          });
+        });
+
+        // Toggle On/Off Musik saat di klik
+        musicToggle.addEventListener("click", () => {
+          if (isMusicPlaying) {
+            bgMusic.pause();
+            musicToggle.querySelector("svg").classList.remove("spin-inf");
+          } else {
+            bgMusic.play();
+            musicToggle.querySelector("svg").classList.add("spin-inf");
+          }
+          isMusicPlaying = !isMusicPlaying;
+        });
+
+        // Initialize Luminous Gallery Lightbox
+        // Menghubungkan setiap gambar dalam galeri untuk pop-up/zoom interaktif
+        const luminousElements = document.querySelectorAll(".luminous");
+        if (luminousElements.length > 0) {
+          new LuminousGallery(luminousElements, {
+            arrowNavigation: true,
+          });
+        }
+
+        // Animasi Tombol Form RSVP (Loading state)
+        const rsvpForm = document.getElementById("rsvp-form");
+        const rsvpBtn = document.getElementById("rsvp-btn");
+        const btnText = document.getElementById("btn-text");
+        const btnLoader = document.getElementById("btn-loader");
+
+        rsvpForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+
+          // Ubah status ke Loading
+          btnText.style.display = "none";
+          btnLoader.style.display = "inline-block";
+          rsvpBtn.disabled = true;
+          rsvpBtn.classList.add("opacity-80", "cursor-not-allowed");
+
+          // Ambil data form RSVP
+          const rsvpName = document.getElementById("rsvp-name").value;
+          const rsvpCount = document.getElementById("rsvp-count").value;
+          const rsvpStatus = document.getElementById("rsvp-status").value;
+
+          // Format Pesan WhatsApp
+          const waStatusText = rsvpStatus === "yes" ? "Hadir" : "Maaf, tidak bisa hadir";
+          const waMessage = `Halo, saya ingin konfirmasi kehadiran undangan pernikahan:\n\n*Nama:* ${rsvpName}\n*Jumlah:* ${rsvpCount} Orang\n*Status:* ${waStatusText}\n\nTerima kasih.`;
+          
+          // GANTI NOMOR WA DI SINI (Pastikan diawali dengan kode negara, contoh: 62)
+          const waNumber = "6287827156772";
+          const waLink = `https://wa.me/${waNumber}?text=${encodeURIComponent(waMessage)}`;
+
+          // Simulasi proses delay sebelum redirect
+          setTimeout(() => {
+            btnLoader.style.display = "none";
+            btnText.style.display = "inline-block";
+            btnText.innerText = "MENGALIHKAN...";
+            rsvpBtn.style.backgroundColor = "#25D366"; // Green WhatsApp sbg indikator success
+            rsvpBtn.style.color = "#fff";
+
+            // Skip redirecting if in iframe or similar, open WA in new tab
+            window.open(waLink, "_blank");
+
+            // Reset form otomatis setelah pengalihan
+            setTimeout(() => {
+              rsvpBtn.disabled = false;
+              btnText.innerText = "KIRIM KONFIRMASI";
+              rsvpBtn.style.backgroundColor = ""; // kembali pakai style tailwind
+              rsvpBtn.classList.remove("opacity-80", "cursor-not-allowed");
+              rsvpForm.reset();
+            }, 3500);
+          }, 1500); // Waktu pura-pura loading = 1.5 detik
+        });
+      });
+    </script>
+  </body>
+</html>
